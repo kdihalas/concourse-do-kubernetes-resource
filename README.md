@@ -64,6 +64,10 @@ resources:
 Provision a new cluster in Digitalocean and it will save the
 cluster ID and the cluster kubeconfig under the resource directory.
 
+### Generated artifacts:
+1. cluster/cluster_id
+2. cluster/kubeconfig
+
 ```yaml
 ---
 resources:
@@ -89,11 +93,6 @@ jobs:
       name: cluster1
       version: 1.13.1-do.2
 ```
-
-### Generated artifacts:
-- cluster/cluster_id
-- cluster/kubeconfig
-
 
 * `name`: *Required.* Name of the cluster for digitalocean panel.
 
