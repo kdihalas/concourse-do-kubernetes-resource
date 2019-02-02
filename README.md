@@ -92,9 +92,6 @@ jobs:
     params:
       name: cluster1
       version: 1.13.1-do.2
-    get_params:
-      name: cluster1
-      skip: true
 ```
 
 * `name`: *Required.* Name of the cluster for digitalocean panel.
