@@ -59,7 +59,7 @@ resources:
 
   * `tags`: *Required.* A list of tags for the nodes in the node pool.
 
-## `in`: Get a new kubernets cluster
+## `in`: Get a new kubernetes cluster
 
 Provision a new cluster in Digitalocean and it will save the
 cluster ID and the cluster kubeconfig under the resource directory.
