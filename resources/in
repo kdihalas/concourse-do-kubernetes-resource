@@ -13,7 +13,7 @@ target = sys.argv[1]
 try:
     skip = payload['params']['skip']
 except:
-    skip = false
+    skip = False
 
 API_URL = 'https://api.digitalocean.com'
 HEADERS = {
@@ -59,7 +59,7 @@ else:
     for cluster in r.json()['kubernetes_clusters']:
         if payload['params']['name'] == cluster['name']:
             cluster_id = cluster['id']
-            
+
 eprint("Downloading kubeconfig")
 get_kubeconfig = "{api}/v2/kubernetes/clusters/{id}/kubeconfig".format(api=API_URL, id=cluster_id)
 r= requests.get(get_kubeconfig, headers=HEADERS)
