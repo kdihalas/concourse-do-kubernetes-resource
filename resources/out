@@ -16,9 +16,11 @@ HEADERS = {
     'Content-Type': 'application/json'
 }
 
-f = open("{target}/cluster_id".format(target=target), "r")
-cluster_id = f.readline()
-f.close()
+get_clusters = "{api}/v2/kubernetes/clusters".format(api=API_URL)
+r = requests.get(get_clusters, headers=HEADERS)
+for cluster in r.json()['kubernetes_clusters']:
+    if payload['params']['name'] == cluster['name']:
+        cluster_id = cluster['id']
 
 try:
     is_delete = payload['params']['delete']

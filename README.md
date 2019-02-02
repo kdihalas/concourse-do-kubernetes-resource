@@ -128,8 +128,10 @@ jobs:
   plan:
   - put: cluster
     params:
+      name: cluster1
       delete: true
 ```
+* `name`: *Required.* Name of the cluster.
 
 * `delete`: *Optional.* If delete is true then the cluster will be deleted.
 
@@ -156,10 +158,13 @@ jobs:
   plan:
   - put: cluster
     params:
+      name: cluster1
       node_pools:
         - name: worker-pool
           count: 3
 ```
+* `name`: *Required.* Name of the cluster.
+
 * `node_pools`: *Required* A list with the node pools you want to update.
 
   * `name`: *Required.* Name of the node pool.
