@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+from __future__ import print_function
+import sys, json, requests, logging, string, random, time
+
+def eprint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
+
+# logging.basicConfig(level=logging.DEBUG)
+id = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(8))
+payload = json.load(sys.stdin)
+target = sys.argv[1]
+
+API_URL = 'https://api.digitalocean.com'
+HEADERS = {
+    'Authorization': "Bearer {token}".format(token=payload['source']['token']),
+    'Content-Type': 'application/json'
+}
+
+f = open("{target}/cluster_id".format(target=target), "r")
+cluster_id = f.readline()
+f.close()
+
+try:
+    is_delete = payload['params']['delete']
+except:
+    is_delete = False
+
+
+if is_delete:
+    eprint('Detected delete command')
+    delete_cluster = "{api}/v2/kubernetes/clusters/{id}".format(api=API_URL, id=cluster_id)
+    r = requests.delete(delete_cluster, headers=HEADERS)
+    if r.status_code == 202:
+        eprint('Delete was successfull')
+    else:
+        eprint('There was a problem with the delete requests please check digitalocean\'s dashboard')
+else:
+    eprint('Detected cluster update')
+    get_pools = "{api}/v2/kubernetes/clusters/{id}/node_pools".format(api=API_URL, id=cluster_id)
+    r = requests.get(get_pools, headers=HEADERS)
+    node_pools = r.json()['node_pools']
+    for pool in payload['params']['node_pools']:
+        for npool in node_pools:
+            if pool['name'] == npool['name']:
+                pool_id = npool['id']
+                eprint("Updating pool {name} with ID: {pool_id}".format(name=pool['name'], pool_id=pool_id))
+                update_pools = "{api}/v2/kubernetes/clusters/{id}/node_pools/{pool_id}".format(api=API_URL, id=cluster_id, pool_id=pool_id)
+                r = requests.put(update_pools, json=pool, headers=HEADERS)
+                if r.status_code == 202:
+                    eprint('Update was successfull')
+                else:
+                    eprint('Update failed')
+output = {
+    'version': { 'ref': id },
+    'metadata': [
+        {'name': 'cluster_id', 'value': ''}
+    ]
+}
+
+print(json.dumps(output))
