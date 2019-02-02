@@ -53,28 +53,25 @@ if skip is not True:
         time.sleep(30)
 
     eprint("Kubernetse cluster creation done!")
-else:
-    get_clusters = "{api}/v2/kubernetes/clusters".format(api=API_URL)
-    r = requests.get(get_clusters, headers=HEADERS)
-    for cluster in r.json()['kubernetes_clusters']:
-        if payload['params']['name'] == cluster['name']:
-            cluster_id = cluster['id']
+    eprint("Downloading kubeconfig")
+    get_kubeconfig = "{api}/v2/kubernetes/clusters/{id}/kubeconfig".format(api=API_URL, id=cluster_id)
+    r= requests.get(get_kubeconfig, headers=HEADERS)
+    if r.status_code == 200:
+        f = open("{target}/kubeconfig".format(target=target), "w+")
+        f.write(r.text)
+        f.close
+    else:
+        eprint("Failed to download kubeconfig")
 
-eprint("Downloading kubeconfig")
-get_kubeconfig = "{api}/v2/kubernetes/clusters/{id}/kubeconfig".format(api=API_URL, id=cluster_id)
-r= requests.get(get_kubeconfig, headers=HEADERS)
-if r.status_code == 200:
-    f = open("{target}/kubeconfig".format(target=target), "w+")
-    f.write(r.text)
-    f.close
+    output = {
+        'version': { 'ref': id },
+        'metadata': [
+            {'name': 'cluster_id', 'value': cluster_id}
+        ]
+    }
 else:
-    eprint("Failed to download kubeconfig")
-
-output = {
-    'version': { 'ref': id },
-    'metadata': [
-        {'name': 'cluster_id', 'value': cluster_id}
-    ]
-}
+    output = {
+        'version': { 'ref': id }
+    }
 
 print(json.dumps(output))
