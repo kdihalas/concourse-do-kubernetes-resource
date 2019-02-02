@@ -10,45 +10,57 @@ id = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in rang
 payload = json.load(sys.stdin)
 target = sys.argv[1]
 
+try:
+    skip = payload['params']['skip']
+except:
+    skip = false
+
 API_URL = 'https://api.digitalocean.com'
 HEADERS = {
     'Authorization': "Bearer {token}".format(token=payload['source']['token']),
     'Content-Type': 'application/json'
 }
 
-cluster_data = {
-  "name": payload['params']['name'],
-  "region": payload['source']['region'],
-  "version": payload['params']['version'],
-  "tags": payload['source']['tags'],
-  "node_pools": payload['source']['node_pools']
-}
+if skip is not True:
+    cluster_data = {
+      "name": payload['params']['name'],
+      "region": payload['source']['region'],
+      "version": payload['params']['version'],
+      "tags": payload['source']['tags'],
+      "node_pools": payload['source']['node_pools']
+    }
 
-eprint("Creating the kubernetes cluster")
-post_cluster = "{api}/v2/kubernetes/clusters".format(api=API_URL)
-r = requests.post(post_cluster, json=cluster_data, headers=HEADERS)
-if r.status_code == 201:
-    response = r.json()
-    cluster_id = response['kubernetes_cluster']['id']
-    f = open("{target}/cluster_id".format(target=target), "w+")
-    f.write(cluster_id)
-    f.close()
+    eprint("Creating the kubernetes cluster")
+    post_cluster = "{api}/v2/kubernetes/clusters".format(api=API_URL)
+    r = requests.post(post_cluster, json=cluster_data, headers=HEADERS)
+    if r.status_code == 201:
+        response = r.json()
+        cluster_id = response['kubernetes_cluster']['id']
+        f = open("{target}/cluster_id".format(target=target), "w+")
+        f.write(cluster_id)
+        f.close()
+    else:
+        eprint("Kubernetes cluster creation failed")
+        sys.exit(-1)
+
+    while True:
+        eprint("Waiting 30 seconds for kubernetes cluster to start")
+        get_cluster = "{api}/v2/kubernetes/clusters/{id}".format(api=API_URL, id=cluster_id)
+        r = requests.get(get_cluster, headers=HEADERS)
+        status = r.json()['kubernetes_cluster']['status']['state']
+        if status == 'running':
+            break
+        time.sleep(30)
+
+    eprint("Kubernetse cluster creation done!")
 else:
-    eprint("Kubernetes cluster creation failed")
-    sys.exit(-1)
-
-while True:
-    eprint("Waiting 30 seconds for kubernetes cluster to start")
-    get_cluster = "{api}/v2/kubernetes/clusters/{id}".format(api=API_URL, id=cluster_id)
-    r = requests.get(get_cluster, headers=HEADERS)
-    status = r.json()['kubernetes_cluster']['status']['state']
-    if status == 'running':
-        break
-    time.sleep(30)
-
-eprint("Kubernetse cluster creation done!")
+    get_clusters = "{api}/v2/kubernetes/clusters".format(api=API_URL)
+    r = requests.get(get_clusters, headers=HEADERS)
+    for cluster in r.json()['kubernetes_clusters']:
+        if payload['params']['name'] == cluster['name']:
+            cluster_id = cluster['id']
+            
 eprint("Downloading kubeconfig")
-
 get_kubeconfig = "{api}/v2/kubernetes/clusters/{id}/kubeconfig".format(api=API_URL, id=cluster_id)
 r= requests.get(get_kubeconfig, headers=HEADERS)
 if r.status_code == 200:
