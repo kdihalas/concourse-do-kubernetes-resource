@@ -92,6 +92,9 @@ jobs:
     params:
       name: cluster1
       version: 1.13.1-do.2
+    get_params:
+      name: cluster1
+      skip: true
 ```
 
 * `name`: *Required.* Name of the cluster for digitalocean panel.
@@ -124,12 +127,15 @@ resources:
           - worker
 
 jobs:
-- name: create-cluster
+- name: delete-cluster
   plan:
   - put: cluster
     params:
       name: cluster1
       delete: true
+    get_params:
+      name: cluster1
+      skip: true
 ```
 * `name`: *Required.* Name of the cluster.
 
@@ -154,7 +160,7 @@ resources:
           - worker
 
 jobs:
-- name: create-cluster
+- name: scale-cluster
   plan:
   - put: cluster
     params:
@@ -162,6 +168,9 @@ jobs:
       node_pools:
         - name: worker-pool
           count: 3
+    get_params:
+      name: cluster1
+      skip: true
 ```
 * `name`: *Required.* Name of the cluster.
 
