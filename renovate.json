@@ -1,6 +1,14 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:base"
-  ]
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": [
+		"config:base"
+	],
+	"assignees": [
+		"kdihalas"
+	],
+	"labels": ["vuln", "dependency", "renovate"],
+	"packageRules": [{
+		"matchPackagePatterns": ["docker"],
+		"labels": ["docker"]
+	}]
 }
