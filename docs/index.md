@@ -17,7 +17,7 @@ resource_types:
 - name: kubernetes-resource
   type: docker-image
   source:
-    repository: kdihalas/do-kubernetes-resource:v2
+    repository: kdihalas/digitalocean-kubernetes-resource:v2
 ```
 
 See [concourse docs](https://concourse-ci.org/resource-types.html) for more details
