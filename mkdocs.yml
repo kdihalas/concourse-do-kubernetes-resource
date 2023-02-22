@@ -1,15 +1,15 @@
-site_name: Digitalocean Kubernetes - Concourse Resource
+site_name: Documentation
+repo_url: https://github.com/kdihalas/concourse-do-kubernetes-resource
 theme:
   name: material
   features:
-    - navigation.sections
-    - navigation.path
-    - toc.integrate
+    - toc.follow
     - search.suggest
     - search.highlight
     - content.tabs.link
     - content.code.annotation
     - content.code.copy
+    - content.action.edit
   language: en
   palette:
     - scheme: default
