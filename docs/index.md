@@ -4,7 +4,7 @@ hide:
 - navigation
 ---
 
-Create, update and delete Digitalocean kubernetes clusters.
+Create, update and delete Digitalocean Kubernetes Clusters.
 
 ## Installing
 
