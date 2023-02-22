@@ -1,4 +1,4 @@
-name: Build a container out of the latest code
+name: Build
 
 on:
   push:
