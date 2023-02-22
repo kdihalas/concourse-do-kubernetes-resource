@@ -1,6 +1,6 @@
 module github.com/kdihalas/concourse-do-kubernetes-resource
 
-go 1.17
+go 1.19
 
 require github.com/digitalocean/godo v1.97.0
 
