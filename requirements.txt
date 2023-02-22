@@ -2,6 +2,6 @@ certifi==2018.11.29
 chardet==3.0.4
 idna==2.10
 jsonpickle==1.5.2
-python-digitalocean==1.13.2
+python-digitalocean==1.17.0
 requests==2.21.0
 urllib3==1.24.1
