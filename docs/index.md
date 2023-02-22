@@ -1,4 +1,8 @@
-# Concourse Resource for Digitalocean Kubernetes
+---
+title: Concourse Resource for Digitalocean Kubernetes
+hide:
+- navigation
+---
 
 Create, update and delete Digitalocean kubernetes clusters.
 
