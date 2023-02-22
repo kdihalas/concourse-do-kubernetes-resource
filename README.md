@@ -13,7 +13,7 @@ resource_types:
 - name: kubernetes-resource
   type: docker-image
   source:
-    repository: kdihalas/do-kubernetes-resource
+    repository: kdihalas/do-kubernetes-resource:v2
 ```
 
 See [concourse docs](https://concourse-ci.org/resource-types.html) for more details
@@ -176,5 +176,3 @@ jobs:
   * `name`: *Required.* Name of the node pool.
 
   * `count`: *Optional.* Number of nodes you want to scale to.
-
-  * `tags`: *Optional.* A list of tags for the nodes in the node pool.
