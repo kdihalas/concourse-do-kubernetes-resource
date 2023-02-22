@@ -1,11 +1,15 @@
-FROM python:3.7-alpine3.7
+FROM golang:1.20.1-bullseye AS builder
 
-RUN apk update \
-    && apk add --no-cache bash
+WORKDIR /concourse/concourse-resource
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
+COPY . .
 
-# Copy assets
-COPY resources/ /opt/resource/
-ADD requirements.txt .
-RUN pip install -r requirements.txt
+ENV CGO_ENABLED 0
+RUN go build -o /assets/check github.com/kdihalas/concourse-do-kubernetes-resource/cmd/check
+RUN go build -o /assets/in github.com/kdihalas/concourse-do-kubernetes-resource/cmd/in
+RUN go build -o /assets/out github.com/kdihalas/concourse-do-kubernetes-resource/cmd/out
 
-CMD ["/bin/bash"]
+FROM gcr.io/distroless/static-debian11 AS resource
+COPY --from=builder /assets /opt/resource
