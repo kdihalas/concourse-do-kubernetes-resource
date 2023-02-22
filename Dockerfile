@@ -1,4 +1,4 @@
-FROM python:2.7-alpine3.7
+FROM python:3.7-alpine3.7
 
 RUN apk update \
     && apk add --no-cache bash
