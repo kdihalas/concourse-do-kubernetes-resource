@@ -197,3 +197,10 @@ Node Pools options
 |name|:material-check:|Name of the node pool|
 |count|:material-check:|How many nodes will be in the pool|
 
+# Container Verification
+
+To verify the container signature you will need to install [cosign](https://docs.sigstore.dev/cosign/installation/) and run 
+
+```bash
+COSIGN_EXPERIMENTAL=1 cosign verify kdihalas/digitalocean-kubernetes-resource:v2
+```
