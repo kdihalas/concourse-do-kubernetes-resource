@@ -32,7 +32,7 @@ jobs:
         
       # Setup buildx for building containers
       - name: Setup Docker buildx
-        uses: docker/setup-buildx-action@2dd22fa31c04297d369158eb483250f578504a9f
+        uses: docker/setup-buildx-action@a19c1710881d7ce3cf668865cc8459bba5b912aa
 
       # Login to Docker hub
       # https://github.com/docker/login-action
