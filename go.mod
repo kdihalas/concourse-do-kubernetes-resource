@@ -2,7 +2,7 @@ module github.com/kdihalas/concourse-do-kubernetes-resource
 
 go 1.19
 
-require github.com/digitalocean/godo v1.97.0
+require github.com/digitalocean/godo v1.98.0
 
 require (
 	github.com/go-playground/locales v0.14.1 // indirect
