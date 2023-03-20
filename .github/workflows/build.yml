@@ -37,7 +37,7 @@ jobs:
       # Login to Docker hub
       # https://github.com/docker/login-action
       - name: Log into registry Docker Hub
-        uses: docker/login-action@219c305e1ce92a755f3aa4ba17387c95df31e987
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
           username: kdihalas
           password: ${{ secrets.DOCKER_PASSWORD }}
